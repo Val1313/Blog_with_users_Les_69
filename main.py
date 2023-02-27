@@ -11,10 +11,12 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_gravatar import Gravatar
 from forms import CreatePostForm, CreateUserForm, LoginForm, CommentForm
+import os
 
 app = Flask(__name__)
 app.app_context().push()
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+# '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app,
@@ -34,7 +36,7 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL',  "sqlite:///blog.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
